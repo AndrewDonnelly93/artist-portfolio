@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { fetchBio } from '../lib/contentful';
 
 const Home = async () => {
@@ -8,7 +9,7 @@ const Home = async () => {
   if (!bio) {
     return <p className="p-6 text-center">Loading bio...</p>;
   }
-
+  
   return (
     <main className="max-w-4xl mx-auto p-6">
       <h1 className="text-4xl font-serif font-bold mb-6">{bio.name}</h1>
@@ -23,7 +24,9 @@ const Home = async () => {
           />
         </div>
       )}
-      <p className="whitespace-pre-line text-lg leading-relaxed">{bio.description}</p>
+      <div className="whitespace-pre-line text-lg leading-relaxed">
+        {documentToReactComponents(bio.description)}
+      </div>
 
       <nav className="mt-8 flex flex-wrap gap-6 text-blue-600 font-semibold text-lg">
         <Link href="/gallery/landscapes">Landscapes</Link>
