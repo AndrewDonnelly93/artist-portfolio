@@ -1,12 +1,16 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
-export const useGalleryStore = create((set) => ({
+const useGalleryStore = create((set) => ({
     categoryFilter: 'All',
-    forSalesFilter: false,
+    availableForSale: false,
     selectedPaintingId: null,
+    searchQuery: '',
 
     setCategoryFilter: (category) => set({ categoryFilter: category }),
-    toggleForSalesFilter: () => set((state) => ({ forSalesFilter: !state.forSalesFilter })),
     selectPainting: (id) => set({ selectedPaintingId: id }),
     clearSelectedPainting: () => set({ selectedPaintingId: null }),
+    setSearchQuery: (query) => set({ searchQuery: query }),
+    setAvailableForSale: (value) => set({ availableForSale: value })
 }));
+
+export default useGalleryStore;

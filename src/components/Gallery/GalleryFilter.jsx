@@ -1,12 +1,30 @@
-import {Box, MenuItem, Select, FormControl, InputLabel, FormControlLabel, Checkbox} from '@mui/material';
-import {useGalleryStore} from '../../stores/galleryStore';
+import {
+    Stack,
+    MenuItem, 
+    Select, 
+    FormControl, 
+    InputLabel, 
+    FormControlLabel, 
+    Switch
+} from '@mui/material';
+import useGalleryStore from '@/stores/useGalleryStore';
 
 const GalleryFilter = () => {
-    const { categoryFilter, forSalesFilter, setCategoryFilter, toggleForSalesFilter } = useGalleryStore();
+    const { 
+        categoryFilter, 
+        availableForSale,
+        setCategoryFilter, 
+        setAvailableForSale 
+    } = useGalleryStore();
     
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
+        <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={2}
+            justifyContent="flex-start"
+            alignItems="center"
+        >
+            <FormControl size="small" sx={{ minWidth: 160 }}>
                 <InputLabel id="category-filter-label">Category</InputLabel>
                 <Select
                     labelId="category-filter-label"
@@ -24,15 +42,17 @@ const GalleryFilter = () => {
         
             <FormControlLabel
                 control={
-                    <Checkbox
-                        checked={forSalesFilter}
-                        onChange={toggleForSalesFilter}
+                    <Switch
+                        checked={!!availableForSale}
+                        onChange={(e) => setAvailableForSale(e.target.checked)}
                         color="primary"
                     />
                 }
                 label="Available for sale"
+                labelPlacement="start"
+                sx={{ justifyContent: 'space-between', width: '100%', ml: 0 }}
             />
-        </Box>
+        </Stack>
     );
 }
 

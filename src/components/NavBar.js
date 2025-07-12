@@ -12,9 +12,9 @@ import {
     Box,
     Button
 } from "@mui/material";
+import { useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
-import { useState } from 'react';
 
 const navLinks = [
     { label: 'Home', href: '/' },
@@ -23,7 +23,7 @@ const navLinks = [
     { label: 'Contact', href: '/contact' }
 ];
 
-const NavBar = ({ bio }) => {
+const NavBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const toggleDrawer = (open) => () => {
@@ -34,7 +34,7 @@ const NavBar = ({ bio }) => {
         <AppBar position="sticky" color="default" evelation={1}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    {bio?.name}
+                    David McEwen
                 </Typography>
 
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>

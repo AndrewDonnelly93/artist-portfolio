@@ -1,28 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import {Container, Typography, CircularProgress} from '@mui/material';
-import { fetchBio } from '../lib/contentful';
-import ArtistBio from '../components/Artist/ArtistBio';
+import useBioStore from '@/stores/useBioStore';
+import ArtistBio from '@/components/Artist/ArtistBio';
 
 const Home = () => {
-  const [bio, setBio] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { bio, loading, error, loadBio } = useBioStore();
 
   useEffect(() => {
-    const loadBio = async () => {
-      try {
-        const fetchedBio = await fetchBio();
-        setBio(fetchedBio);
-      } catch (error) {
-        console.error("Error fetching bio:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadBio();
-  }, []);
+    if (!bio && !loading) {
+      loadBio();
+    }
+  }, [bio, loading, loadBio]);
 
   if (loading) {
     return (
@@ -35,11 +25,11 @@ const Home = () => {
     );
   }
 
-  if (!bio) {
+  if (error || !bio) {
     return (
       <Container maxWidth="md" sx={{ textAlign: 'center', py: 8, mt: 10 }}>
         <Typography variant="h5" color="error">
-          Artist bio not found. Please try again later.
+          {error || "Artist bio not found. Please try again later."}
         </Typography>
       </Container>
     );

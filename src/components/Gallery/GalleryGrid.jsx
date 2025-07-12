@@ -1,13 +1,25 @@
 'use client';
 
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import PaintingCard from "./PaintingCard";
 
 const GalleryGrid = ({ paintings }) => {
+    if (!paintings || paintings.length === 0) {
+        return (
+            <Grid container spacing={4} justifyContent="center">
+                <Grid>
+                    <Typography variant="h6" color="text.secondary" align="center">
+                        No paintings found.
+                    </Typography>
+                </Grid>
+            </Grid>
+        );
+    }
+
     return (
         <Grid container spacing={4} justifyContent="center">
             {paintings.map((painting) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={`${painting.id}${painting.slug}`}>
+                <Grid key={`${painting.id}${painting.slug}`}>
                     <PaintingCard painting={painting} />
                 </Grid>
             ))}
