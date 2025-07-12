@@ -1,17 +1,17 @@
 import contentfulManagement from 'contentful-management';
 import dotenv from 'dotenv';
 
-dotenv.config({ path: './.env' });
+dotenv.config({ path: './.env.local' });
 
 const client = contentfulManagement.createClient({
   accessToken: process.env.CONTENTFUL_MANAGEMENT_TOKEN,
 });
 
-const SPACE_ID = process.env.CONTENTFUL_SPACE_ID;
-
+const SPACE_ID = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
 if (!SPACE_ID) {
   throw new Error('CONTENTFUL_SPACE_ID environment variable is not defined.');
 }
+
 const ENVIRONMENT_ID = 'master';
 
 const assetIds = [
@@ -51,14 +51,15 @@ const paintings = Array.from({ length: 30 }).map((_, i) => ({
   category: ['Landscapes', 'Portraits', 'Seascapes', 'Abstract'][i % 4],
   yearCreated: 2000 + (i % 23),
   dimensions: `${30 + i} x ${40 + i} cm`,
-  externalUrl: i % 3 === 0 ? `https://example.com/painting${i + 1}` : '',
   availableForSale: i % 2 === 0,
   price: i % 2 === 0 ? 100 + i * 20 : 0,
+  printPrice: i % 2 === 0 ? 50 + i * 10 : 0,
+  slug: `painting-${i + 1}`,
   materials: ['Oil on Canvas', 'Acrylic', 'Watercolor', 'Mixed Media'][i % 4],
   tags: ['modern', 'colorful', 'classic', 'minimalist'][i % 4],
 }));
 
-async function seed() {
+const seed = async () => {
   try {
     const space = await client.getSpace(SPACE_ID);
     const environment = await space.getEnvironment(ENVIRONMENT_ID);
@@ -76,9 +77,10 @@ async function seed() {
           category: { 'en-US': painting.category },
           yearCreated: { 'en-US': painting.yearCreated },
           dimensions: { 'en-US': painting.dimensions },
-          externalUrl: { 'en-US': painting.externalUrl },
           availableForSale: { 'en-US': painting.availableForSale },
           price: { 'en-US': painting.price },
+          slug: { 'en-US': painting.slug },
+          printPrice: { 'en-US': painting.printPrice },
           materials: { 'en-US': painting.materials },
           tags: { 'en-US': painting.tags },
           image: {

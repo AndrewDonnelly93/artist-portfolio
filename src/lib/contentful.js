@@ -1,8 +1,8 @@
 import { createClient } from 'contentful';
 
 const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+  space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
+  accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
 });
 
 export const fetchBio = async () => {
@@ -23,7 +23,13 @@ export const fetchPaintings = async () => {
     dimensions: item.fields.dimensions,
     description: item.fields.description,
     imageUrl: item.fields.image.fields.file.url,
-    purchaseLink: item.fields.purchaseLink,
     printLink: item.fields.printLink || null,
+    yearCreated: item.fields.yearCreated,
+    availableForSale: item.fields.availableForSale,
+    price: item.fields.price,
+    materials: item.fields.materials,
+    tags: item.fields.tags,
+    printPrice: item.fields.printPrice,
+    slug: item.fields.slug
   }));
 }
