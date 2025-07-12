@@ -34,7 +34,12 @@ const ArtistBio = ({ bio }) => {
                 <Typography 
                     component="div"
                     dangerouslySetInnerHTML={{ __html: htmlDescription }}
-                    sx={{ whiteSpace: 'pre-line', lineHeight: 1.6, mb: 3 }}
+                    sx={{ 
+                        whiteSpace: 'pre-line',
+                        lineHeight: 1.6,
+                        mb: 3,
+                        textAlign: 'left'
+                    }}
                 />
             </Box>        
 
