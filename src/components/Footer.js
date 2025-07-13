@@ -4,10 +4,12 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LanguageIcon from '@mui/icons-material/Language';
 
 const Footer = () => {
+    const year = new Date().getFullYear();
+
     return (
         <Box component="footer" sx={{ backgroundColor: '#f5f5f5', py: 4, mt: 8 }}>
             <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
-                © {new Date().getFullYear()} David McEwen. All rights reserved.
+                © {year} David McEwen. All rights reserved.
             </Typography>
 
             <Container maxWidth="md" sx={{ mb: 2}}>

@@ -101,59 +101,69 @@ const GalleryPage = () => {
 
     const paginated = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
-    return ( 
-        <Container maxWidth="lg" sx={{ mt: 10, mb: 5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Typography variant="h3" align="center" gutterBottom>
-                Gallery
-            </Typography>
-
-            <Stack 
-                direction={{ xs: 'column', sm: 'row' }} 
-                spacing={2} 
-                justifyContent="space-between" 
-                alignItems={{ xs: 'stretch', sm: 'center' }}
-                sx={{ mb: 4, width: '100%' }}
+    return (
+        <Box 
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: 'calc(100vh - 64px - 212px)' // full viewport height minus nav/footer 
+            }}
+        >
+            <Container 
+                maxWidth="lg" 
+                sx={{ mt: 10, mb: 5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
-                <SearchBar 
-                    value={searchQuery} 
-                />
-        
-                <GalleryFilter 
-                    categoryFilter={categoryFilter}
-                    availableForSale={availableForSale}
-                    setCategoryFilter={setCategoryFilter}
-                    setAvailableForSale={setAvailableForSale}
-                />
-            </Stack>    
-
-            {loading ? (
-                <Typography variant="h6" align="center" sx={{ mt: 6 }}>
-                    Loading paintings...    
+                <Typography variant="h3" align="center" gutterBottom>
+                    Gallery
                 </Typography>
-            ) : error ? (
-                <Typography variant="h6" color="error" align="center" sx={{ mt: 6 }}>
-                    {error}
-                </Typography>
-            ) : (  
-                <>
-                    <Fade in={!loading} timeout={600}>
-                        <Box sx={{ mb: 4 }}>
-                            <GalleryGrid paintings={paginated} />
-                        </Box>
-                    </Fade>
 
-                    <Stack spacing={2} alignItems="center">
-                        <Pagination
-                            count={Math.ceil(filtered.length / ITEMS_PER_PAGE)}
-                            page={page}
-                            onChange={(_, value) => setPage(value)}
-                            color="primary"
-                        />
-                    </Stack>    
-                </> 
-            )}
+                <Stack 
+                    direction={{ xs: 'column', sm: 'row' }} 
+                    spacing={2} 
+                    justifyContent="space-between" 
+                    alignItems={{ xs: 'stretch', sm: 'center' }}
+                    sx={{ mb: 4, width: '100%' }}
+                >
+                    <SearchBar 
+                        value={searchQuery} 
+                    />
+            
+                    <GalleryFilter 
+                        categoryFilter={categoryFilter}
+                        availableForSale={availableForSale}
+                        setCategoryFilter={setCategoryFilter}
+                        setAvailableForSale={setAvailableForSale}
+                    />
+                </Stack>    
 
-        </Container>    
+                {loading ? (
+                    <Typography variant="h6" align="center" sx={{ mt: 6 }}>
+                        Loading paintings...    
+                    </Typography>
+                ) : error ? (
+                    <Typography variant="h6" color="error" align="center" sx={{ mt: 6 }}>
+                        {error}
+                    </Typography>
+                ) : (  
+                    <>
+                        <Fade in={!loading} timeout={600}>
+                            <Box sx={{ mb: 4 }}>
+                                <GalleryGrid paintings={paginated} />
+                            </Box>
+                        </Fade>
+
+                        <Stack spacing={2} alignItems="center">
+                            <Pagination
+                                count={Math.ceil(filtered.length / ITEMS_PER_PAGE)}
+                                page={page}
+                                onChange={(_, value) => setPage(value)}
+                                color="primary"
+                            />
+                        </Stack>    
+                    </> 
+                )}
+            </Container>
+        </Box>         
     );
 };
 

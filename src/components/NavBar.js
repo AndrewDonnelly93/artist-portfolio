@@ -19,7 +19,6 @@ import Link from 'next/link';
 const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Gallery', href: '/gallery' },
-    { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' }
 ];
 
@@ -31,7 +30,7 @@ const NavBar = () => {
     };
 
     return (
-        <AppBar position="sticky" color="default" evelation={1}>
+        <AppBar position="sticky" color="default" elevation={1}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     David McEwen
