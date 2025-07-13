@@ -11,6 +11,7 @@ import {
   Stack,
   Button,
 } from '@mui/material';
+import Image from 'next/image';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 const PaintingCard = ({ painting }) => {
@@ -28,6 +29,8 @@ const PaintingCard = ({ painting }) => {
     slug,
     description,
   } = painting;
+  const width = imageUrl?.width ?? 345;
+  const height = imageUrl?.height ?? 240;
 
   return (
     <Card
@@ -41,13 +44,31 @@ const PaintingCard = ({ painting }) => {
       }}
     >
       <Link href={`/paintings/${slug}`} passHref>
-        <CardMedia
-          component="img"
-          height="240"
-          image={`https:${imageUrl}`}
-          alt={title}
-          sx={{ cursor: 'pointer', objectFit: 'cover' }}
-        />
+        <Box
+          sx={{
+            position: 'relative',
+            width: 345,
+            height: 240,
+            borderRadius: 2,
+            overflow: 'hidden',
+            cursor: 'pointer',
+          }}
+        >
+          <Image
+            src={imageUrl.url}
+            alt={title}
+            width={width}
+            height={height}
+            style={{
+              objectFit: 'cover',
+              borderRadius: 8,
+              width: '100%', // make image fill width
+              height: 'auto', // maintain aspect ratio on height
+            }}
+            sizes="345px"
+            priority
+          />
+        </Box>
 
         <CardContent>
           <Typography gutterBottom variant="h6">

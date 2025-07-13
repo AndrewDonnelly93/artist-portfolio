@@ -1,7 +1,7 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
-import prettier from 'eslint-plugin-prettier';
+import * as prettier from 'eslint-plugin-prettier';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,8 +15,9 @@ const eslintConfig = [
 
   {
     plugins: {
-      prettier,
+      prettier: true,
     },
+    extends: ['plugin:prettier/recommended'],
     rules: {
       // Enforce Prettier formatting
       'prettier/prettier': 'warn',
@@ -28,7 +29,6 @@ const eslintConfig = [
       // Optional: style preferences
       quotes: ['warn', 'single', { avoidEscape: true }],
       'jsx-quotes': ['warn', 'prefer-double'],
-      'prettier/prettier': 'warn',
       semi: ['warn', 'always'],
     },
   },

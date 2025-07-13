@@ -31,14 +31,10 @@ const schema = z.object({
 const ContactPage = () => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    console.log('ContactPage mounted');
     setMounted(true);
   }, []);
 
   const recaptchaRef = useRef(null);
-  const [recaptchaKey, setRecaptchaKey] = useState(0); // key to force remount
-
-  console.log('Rendering recaptcha, mounted:', mounted, 'key:', recaptchaKey);
 
   const {
     register,
@@ -91,7 +87,6 @@ const ContactPage = () => {
       }
 
       setValue('token', '');
-      setRecaptchaKey((prev) => prev + 1); // force remount of recaptcha component
     } else {
       setStatus({ success: null, error: json.error || 'Failed to send message.', loading: false });
     }

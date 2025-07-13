@@ -60,13 +60,15 @@ const NavBar = () => {
         <List sx={{ width: 200 }}>
           {navLinks.map((link) => (
             <ListItem
-              button="true"
+              button
               key={link.label}
               component={Link}
               href={link.href}
               onClick={toggleDrawer(false)}
             >
-              <ListItemText primary={link.label} />
+              <Link href={link.href} passHref>
+                <ListItemText primary={link.label} />
+              </Link>
             </ListItem>
           ))}
         </List>
