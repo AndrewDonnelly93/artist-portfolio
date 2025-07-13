@@ -80,12 +80,12 @@ const PaintingPage = async ({ params }) => {
       {availableForSale && (
         <Box sx={{ mt: 2 }}>
           {price && (
-                      <Button variant="contained" color="primary" sx={{ mr: 2; mb: 2 }}>
+            <Button variant="contained" color="primary" sx={{ mr: 2, mb: 2 }}>
               Buy Original (€{price})
             </Button>
           )}
           {printPrice && (
-                      <Button sx={{mb:2}} variant="outlined" color="secondary">
+            <Button sx={{ mb: 2 }} variant="outlined" color="secondary">
               Buy Print (€{printPrice})
             </Button>
           )}
