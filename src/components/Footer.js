@@ -58,7 +58,7 @@ const Footer = () => {
         <Typography variant="body2" color="text.secondary" align="center">
           Built with Next.js & Contentful by&nbsp;
           <Link
-            href={`https://www.linkedin.com/in/andrewdonnelly93/`}
+            href={'https://www.linkedin.com/in/andrewdonnelly93/'}
             target="_blank"
             rel="noopener noreferrer"
             color="inherit"
