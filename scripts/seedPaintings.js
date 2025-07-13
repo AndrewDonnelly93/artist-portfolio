@@ -24,8 +24,8 @@ const assetIds = [
   '12hI4d6dN7DM5uIpac6NgJ',
   '3WP2VG7gaJtOmrWUJvwGHt',
   'X2ecaGuZv2WHkZyvCVQpo',
-  '4tyU1cMROFbVE7o9aBjYZI'
-]
+  '4tyU1cMROFbVE7o9aBjYZI',
+];
 
 const paintings = Array.from({ length: 30 }).map((_, i) => ({
   title: `Painting ${i + 1}`,
@@ -35,7 +35,7 @@ const paintings = Array.from({ length: 30 }).map((_, i) => ({
     content: [
       {
         nodeType: 'paragraph',
-        data: {}, 
+        data: {},
         content: [
           {
             nodeType: 'text',
@@ -101,6 +101,6 @@ const seed = async () => {
   } catch (error) {
     console.error('Error seeding paintings:', error);
   }
-}
+};
 
 seed();

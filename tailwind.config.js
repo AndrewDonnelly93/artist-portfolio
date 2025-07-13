@@ -3,15 +3,12 @@ import lineClamp from '@tailwindcss/line-clamp';
 import typography from '@tailwindcss/typography';
 
 const config = {
-  content: [
-    './pages/**/*.{js,jsx,ts,tsx}', 
-    './components/**/*.{js,jsx,ts,tsx}',
-  ],
+  content: ['./pages/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        primary: '#1D4ED8',    // deep blue accent
-        secondary: '#D97706',  // warm ochre accent
+        primary: '#1D4ED8', // deep blue accent
+        secondary: '#D97706', // warm ochre accent
         background: '#FAFAFA', // soft neutral background
       },
       fontFamily: {
@@ -20,10 +17,7 @@ const config = {
       },
     },
   },
-  plugins: [
-    lineClamp,
-    typography,
-  ],
+  plugins: [lineClamp, typography],
 };
 
 export default config;

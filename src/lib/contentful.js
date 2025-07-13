@@ -9,7 +9,7 @@ export const fetchBio = async () => {
   const entries = await client.getEntries({ content_type: 'bio', limit: 1 });
   if (!entries.items.length) return null;
   return entries.items[0].fields;
-}
+};
 
 export const fetchPaintings = async () => {
   const entries = await client.getEntries({
@@ -29,6 +29,6 @@ export const fetchPaintings = async () => {
     materials: item.fields.materials,
     tags: item.fields.tags,
     printPrice: item.fields.printPrice,
-    slug: item.fields.slug
+    slug: item.fields.slug,
   }));
-}
+};

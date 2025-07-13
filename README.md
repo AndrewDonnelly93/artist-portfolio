@@ -63,4 +63,4 @@ Feel free to reach out if you want help customizing or expanding this project!
 
 ---
 
-*Created with care by Andrew Donnelly — blending art and code seamlessly.
+\*Created with care by Andrew Donnelly — blending art and code seamlessly.

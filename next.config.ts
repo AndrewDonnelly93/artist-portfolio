@@ -3,10 +3,10 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: '/(.*)',
         headers: [
           {
-            key: "Content-Security-Policy",
+            key: 'Content-Security-Policy',
             value: `
               default-src 'self';
               script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com;
@@ -19,10 +19,12 @@ const nextConfig = {
               object-src 'none';
               base-uri 'self';
               form-action 'self';
-            `.replace(/\s{2,}/g, ' ').trim()
-          }
-        ]
-      }
+            `
+              .replace(/\s{2,}/g, ' ')
+              .trim(),
+          },
+        ],
+      },
     ];
   },
   images: {
