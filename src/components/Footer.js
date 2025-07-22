@@ -7,13 +7,23 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <Box component="footer" sx={{ backgroundColor: '#f5f5f5', py: 4, mt: 8 }}>
-      <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
+    <Box component="footer" sx={{ backgroundColor: '#000', color: '#fff', py: 4, mt: 8 }}>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        sx={{ mb: 2, color: '#fff' }}
+      >
         © {year} David McEwen. All rights reserved.
       </Typography>
 
       <Container maxWidth="md" sx={{ mb: 2 }}>
-        <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2, mb: 2 }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ mt: 2, mb: 2, color: '#fff' }}
+        >
           Follow David McEwen on:
         </Typography>
 
@@ -55,8 +65,8 @@ const Footer = () => {
           </Link>
         </Stack>
 
-        <Typography variant="body2" color="text.secondary" align="center">
-          Built with Next.js & Contentful by&nbsp;
+        <Typography variant="body2" color="text.secondary" align="center" sx={{ color: '#fff' }}>
+          Built by&nbsp;
           <Link
             href={'https://www.linkedin.com/in/andrewdonnelly93/'}
             target="_blank"

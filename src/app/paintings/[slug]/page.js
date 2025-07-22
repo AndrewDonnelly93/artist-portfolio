@@ -27,10 +27,30 @@ const PaintingPage = async ({ params }) => {
     printPrice,
     materials,
     tags,
+    id,
   } = painting;
 
   const width = imageUrl.width || 800;
   const height = imageUrl.height || 600;
+
+  const handleBuyNow = async () => {
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+        price,
+        id,
+      }),
+    });
+
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    }
+  };
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 4 }}>
@@ -78,7 +98,7 @@ const PaintingPage = async ({ params }) => {
       </Typography>
 
       {availableForSale && (
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 2 }} onClick={handleBuyNow}>
           {price && (
             <Button variant="contained" color="primary" sx={{ mr: 2, mb: 2 }}>
               Buy Original (€{price})

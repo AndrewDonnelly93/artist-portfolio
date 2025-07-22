@@ -16,25 +16,38 @@ export const fetchPaintings = async () => {
     content_type: 'painting',
     order: 'fields.title',
   });
-  return entries.items.map((item) => ({
-    id: item.sys.id,
-    title: item.fields.title,
-    category: item.fields.category,
-    dimensions: item.fields.dimensions,
-    description: item.fields.description,
-    imageUrl: {
-      url: `https:${item.fields.image.fields.file.url}`,
-      width: item.fields.image.fields.file.details.image.width,
-      height: item.fields.image.fields.file.details.image.height,
-    },
-    yearCreated: item.fields.yearCreated,
-    availableForSale: Boolean(item.fields.availableForSale),
-    price: item.fields.price,
-    materials: item.fields.materials,
-    tags: item.fields.tags,
-    printPrice: item.fields.printPrice,
-    slug: item.fields.slug,
-  }));
+
+  return entries.items.map((item) => {
+    const imageField = item.fields.image;
+
+    const imageUrl = imageField?.fields?.file?.url
+      ? {
+          url: `https:${imageField.fields.file.url}`,
+          width: imageField.fields.file.details?.image?.width || null,
+          height: imageField.fields.file.details?.image?.height || null,
+        }
+      : {
+          url: 'https://placehold.co/600x400',
+          width: 600,
+          height: 400,
+        };
+
+    return {
+      id: item.sys.id,
+      title: item.fields.title,
+      category: item.fields.category,
+      dimensions: item.fields.dimensions,
+      description: item.fields.description,
+      imageUrl,
+      yearCreated: item.fields.yearCreated,
+      availableForSale: Boolean(item.fields.availableForSale),
+      price: item.fields.price,
+      materials: item.fields.materials,
+      tags: item.fields.tags,
+      printPrice: item.fields.printPrice,
+      slug: item.fields.slug,
+    };
+  });
 };
 
 export const fetchPaintingBySlug = async (slug) => {
@@ -47,6 +60,18 @@ export const fetchPaintingBySlug = async (slug) => {
   if (!entries.items.length) return null;
 
   const item = entries.items[0];
+  const imageField = item.fields.image;
+  const imageUrl = imageField?.fields?.file?.url
+    ? {
+        url: `https:${imageField.fields.file.url}`,
+        width: imageField.fields.file.details?.image?.width || null,
+        height: imageField.fields.file.details?.image?.height || null,
+      }
+    : {
+        url: 'https://placehold.co/600x400',
+        width: 600,
+        height: 400,
+      };
 
   return {
     id: item.sys.id,
@@ -54,11 +79,7 @@ export const fetchPaintingBySlug = async (slug) => {
     category: item.fields.category,
     dimensions: item.fields.dimensions,
     description: item.fields.description,
-    imageUrl: {
-      url: `https:${item.fields.image.fields.file.url}`,
-      width: item.fields.image.fields.file.details.image.width,
-      height: item.fields.image.fields.file.details.image.height,
-    },
+    imageUrl,
     yearCreated: item.fields.yearCreated,
     availableForSale: Boolean(item.fields.availableForSale),
     price: item.fields.price,

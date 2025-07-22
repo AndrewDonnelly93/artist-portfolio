@@ -71,7 +71,7 @@ export default function GalleryClient() {
     if (searchQuery) params.set('search', searchQuery);
     if (page !== 1) params.set('page', page.toString());
 
-     const newUrl = `/gallery?${params.toString()}`;
+    const newUrl = `/gallery?${params.toString()}`;
     // Check if params really changed
     if (window.location.search !== `?${params.toString()}`) {
       router.replace(newUrl);
@@ -82,8 +82,13 @@ export default function GalleryClient() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px - 212px)' }}>
-      <Container maxWidth="lg" sx={{ mt: 10, mb: 5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography variant="h3" align="center" gutterBottom>Gallery</Typography>
+      <Container
+        maxWidth="lg"
+        sx={{ mt: 10, mb: 5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      >
+        <Typography variant="h3" align="center" gutterBottom>
+          Gallery
+        </Typography>
 
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
@@ -102,9 +107,13 @@ export default function GalleryClient() {
         </Stack>
 
         {loading ? (
-          <Typography variant="h6" align="center" sx={{ mt: 6 }}>Loading paintings...</Typography>
+          <Typography variant="h6" align="center" sx={{ mt: 6 }}>
+            Loading paintings...
+          </Typography>
         ) : error ? (
-          <Typography variant="h6" color="error" align="center" sx={{ mt: 6 }}>{error}</Typography>
+          <Typography variant="h6" color="error" align="center" sx={{ mt: 6 }}>
+            {error}
+          </Typography>
         ) : (
           <>
             <Fade in={!loading} timeout={600}>
@@ -119,6 +128,19 @@ export default function GalleryClient() {
                 page={page}
                 onChange={(_, value) => setPage(value)}
                 color="primary"
+                sx={{
+                  button: {
+                    color: '#fff',
+                    borderColor: '#888',
+                  },
+                  '.Mui-selected': {
+                    backgroundColor: '#90caf9',
+                    color: '#000',
+                    '&:hover': {
+                      backgroundColor: '#64b5f6',
+                    },
+                  },
+                }}
               />
             </Stack>
           </>

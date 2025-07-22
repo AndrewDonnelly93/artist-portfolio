@@ -12,7 +12,7 @@ const ArtistBio = ({ bio }) => {
   const htmlDescription = documentToHtmlString(description);
 
   return (
-    <Stack spacing={4} alignItems="center" sx={{ py: 8 }}>
+    <Stack spacing={4} alignItems="center" sx={{ py: 8, backround: '#fff' }}>
       <Avatar
         src={`https:${photo.fields.file.url}`}
         alt={name}
