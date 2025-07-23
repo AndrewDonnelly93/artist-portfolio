@@ -10,11 +10,14 @@ import {
   Box,
   Stack,
   Button,
+  useTheme,
 } from '@mui/material';
 import Image from 'next/image';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 const PaintingCard = ({ painting }) => {
+  const theme = useTheme();
+
   const {
     title,
     category,
@@ -28,9 +31,23 @@ const PaintingCard = ({ painting }) => {
     tags,
     slug,
     description,
+    printAvailable,
   } = painting;
   const width = imageUrl?.width ?? 345;
   const height = imageUrl?.height ?? 240;
+
+  const isDark = theme.palette.mode === 'dark';
+
+  const buttonStyles = {
+    fontWeight: 'bold',
+    borderColor: isDark ? 'secondary.light' : 'secondary.main',
+    color: isDark ? 'secondary.light' : 'secondary.main',
+    '&:hover': {
+      backgroundColor: isDark ? 'secondary.dark' : 'secondary.light',
+      color: isDark ? 'common.white' : 'common.black',
+    },
+    flex: 1, // make buttons share equal width
+  };
 
   return (
     <Card
@@ -41,6 +58,12 @@ const PaintingCard = ({ painting }) => {
         maxWidth: 345,
         borderRadius: 4,
         boxShadow: 3,
+        bgcolor: isDark ? 'background.paper' : 'white',
+        color: isDark ? 'text.primary' : 'inherit',
+        transition: '0.3s',
+        '&:hover': {
+          boxShadow: 6,
+        },
       }}
     >
       <Link href={`/paintings/${slug}`} passHref>
@@ -95,22 +118,22 @@ const PaintingCard = ({ painting }) => {
               Print: €{printPrice}
             </Typography>
           )}
-
-          {tags && tags.length > 0 && (
-            <Box sx={{ mt: 2 }}>
-              <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', mt: 2 }}>
-                <Chip label={tags} size="small" variant="outlined" />
-              </Stack>
-            </Box>
-          )}
         </CardContent>
-        <CardActions>
-          {painting.availableForSale && (
-            <Button size="small" color="secondary">
-              Buy Now
-            </Button>
-          )}
-        </CardActions>
+
+        {(availableForSale || printAvailable) && (
+          <CardActions sx={{ px: 2, pb: 2, gap: 1 }}>
+            {availableForSale && price && (
+              <Button variant="outlined" color="secondary" sx={buttonStyles}>
+                Buy Original
+              </Button>
+            )}
+            {printAvailable && printPrice && (
+              <Button variant="outlined" color="secondary" sx={buttonStyles}>
+                Buy Print
+              </Button>
+            )}
+          </CardActions>
+        )}
       </Link>
     </Card>
   );

@@ -1,18 +1,48 @@
 'use client';
 
-import { Avatar, Typography, Box, Stack, IconButton, Divider } from '@mui/material';
+import React from 'react';
+import { Avatar, Typography, Box, Stack, IconButton, Divider, useTheme } from '@mui/material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LanguageIcon from '@mui/icons-material/Language';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
-const ArtistBio = ({ bio }) => {
+interface Photo {
+  fields: {
+    file: {
+      url: string;
+    };
+  };
+}
+
+interface ArtistBioProps {
+  bio: {
+    name: string;
+    description: any; // rich text object from Contentful (you can type more specifically if you want)
+    photo: Photo;
+    facebookUrl?: string;
+    singulartUrl?: string;
+    fineArtAmericaUrl?: string;
+  } | null;
+}
+
+const ArtistBio: React.FC<ArtistBioProps> = ({ bio }) => {
+  const theme = useTheme();
+
   if (!bio) return null;
 
   const { name, description, photo, facebookUrl, singulartUrl, fineArtAmericaUrl } = bio;
   const htmlDescription = documentToHtmlString(description);
 
   return (
-    <Stack spacing={4} alignItems="center" sx={{ py: 8, backround: '#fff' }}>
+    <Stack
+      spacing={4}
+      alignItems="center"
+      sx={{
+        py: 8,
+        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.paper : '#fff',
+        color: theme.palette.text.primary,
+      }}
+    >
       <Avatar
         src={`https:${photo.fields.file.url}`}
         alt={name}
@@ -32,6 +62,7 @@ const ArtistBio = ({ bio }) => {
             lineHeight: 1.6,
             mb: 3,
             textAlign: 'left',
+            color: theme.palette.text.primary,
           }}
         />
       </Box>
@@ -61,7 +92,7 @@ const ArtistBio = ({ bio }) => {
             target="_blank"
             rel="noopener noreferrer"
             color="secondary"
-            aria-label="singulart"
+            aria-label="Singulart"
           >
             <LanguageIcon />
           </IconButton>
@@ -74,7 +105,7 @@ const ArtistBio = ({ bio }) => {
             target="_blank"
             rel="noopener noreferrer"
             color="secondary"
-            aria-label="fineArtAmerica"
+            aria-label="Fine Art America"
           >
             <LanguageIcon />
           </IconButton>

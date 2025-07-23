@@ -7,8 +7,6 @@ const client = contentfulManagement.createClient({
   accessToken: process.env.CONTENTFUL_MANAGEMENT_TOKEN,
 });
 
-console.log('Token:', process.env.CONTENTFUL_MANAGEMENT_TOKEN);
-
 const SPACE_ID = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
 if (!SPACE_ID) {
   throw new Error('CONTENTFUL_SPACE_ID environment variable is not defined.');
@@ -28,22 +26,16 @@ const getAssetIds = async () => {
     id: asset.sys.id,
     title: asset.fields.title['en-US'],
     url: asset.fields.file['en-US'].url,
+    width: asset.fields.file['en-US'].details?.image?.width,
+    height: asset.fields.file['en-US'].details?.image?.height,
   }));
 };
 
 const generatePaintings = async () => {
-  const assetIds = await getAssetIds();
+  const assets = await getAssetIds();
 
-  const paintings = assetIds.map((assetId, i) => (
-    const imageField = item.fields.image;
-
-    const imageUrl = imageField?.fields?.file?.url
-      ? {
-          url: `https:${imageField.fields.file.url}`,
-          width: imageField.fields.file.details?.image?.width || null,
-          height: imageField.fields.file.details?.image?.height || null,
-        }
-      : null;
+  const paintings = assets.map((asset, i) => {
+    const { id, title, url, width, height } = asset;
 
     return {
       fields: {
@@ -102,12 +94,13 @@ const generatePaintings = async () => {
             sys: {
               type: 'Link',
               linkType: 'Asset',
-              id: assetId.id,
+              id: asset.id,
             },
           },
         },
       },
-  }));
+    };
+  });
 
   return paintings;
 };
