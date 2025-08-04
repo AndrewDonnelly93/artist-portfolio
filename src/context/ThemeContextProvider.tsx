@@ -1,14 +1,14 @@
 'use client';
 
 import { createContext, useContext, ReactNode, useState, useMemo, useEffect } from 'react';
-import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { darkTheme, lightTheme } from '@/styles/theme';
 
 type ThemeMode = 'light' | 'dark';
 
 type ThemeContextType = {
-  mode: 'light' | 'dark';
+  mode: ThemeMode;
   toggleColorMode: () => void;
 };
 
@@ -19,22 +19,11 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export const useThemeContext = () => useContext(ThemeContext);
 
-type Props = {
-  children: ReactNode;
-};
-
 const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<ThemeMode>('dark');
   const [mounted, setMounted] = useState(false);
 
-  const toggleColorMode = () => {
-    setMode((prev) => {
-      const nextMode = prev === 'light' ? 'dark' : 'light';
-      localStorage.setItem('themeMode', nextMode);
-      return nextMode;
-    });
-  };
-
+  // Initial load from localStorage
   useEffect(() => {
     const storedMode = localStorage.getItem('themeMode') as ThemeMode | null;
     if (storedMode) {
@@ -45,19 +34,22 @@ const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
     setMounted(true);
   }, []);
 
+  // Update localStoage and <html> class when mode changes
   useEffect(() => {
-    if (!mounted) return; // Fon't run on server or before mount
+    if (!mounted) return; // Won't run on server or before mount
+    localStorage.setItem('themeMode', mode);
     const root = window.document.documentElement;
     root.classList.remove('theme-light', 'theme-dark');
     root.classList.add(`theme-${mode}`);
   }, [mode, mounted]);
 
-  // Update the <html> class on mode change
-  useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove('theme-light', 'theme-dark');
-    root.classList.add(`theme-${mode}`);
-  }, [mode]);
+  const toggleColorMode = () => {
+    setMode((prev) => {
+      const nextMode = prev === 'light' ? 'dark' : 'light';
+      localStorage.setItem('themeMode', nextMode);
+      return nextMode;
+    });
+  };
 
   // Memoize theme object and context value
   const theme = useMemo(() => (mode === 'light' ? lightTheme : darkTheme), [mode]);
@@ -67,7 +59,7 @@ const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
     <ThemeContext.Provider value={contextValue}>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
-        {children}
+        {mounted ? children : null}
       </MuiThemeProvider>
     </ThemeContext.Provider>
   );

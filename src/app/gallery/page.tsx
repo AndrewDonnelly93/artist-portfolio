@@ -2,12 +2,12 @@ import { Suspense } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import GalleryClient from './GalleryClient';
 
-export default function GalleryPage() {
+const GalleryPage: React.FC = () => {
   return (
     <Suspense
       fallback={
         <Box
-          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}
+          sx={ { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' } }
         >
           <CircularProgress />
         </Box>
@@ -17,3 +17,5 @@ export default function GalleryPage() {
     </Suspense>
   );
 }
+
+export default GalleryPage

@@ -1,5 +1,13 @@
 import { create } from 'zustand';
-import { fetchPaintings } from '@/lib/contentful';
+import { fetchPaintings, Painting } from '@/lib/contentful';
+
+// usePaintingStore.ts
+export type PaintingStore = {
+  paintings: Painting[] | [];
+  loading: boolean;
+  error: string | null;
+  loadPaintings: () => void;
+};
 
 const usePaintingStore = create((set) => ({
   paintings: [],

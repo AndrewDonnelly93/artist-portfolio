@@ -4,6 +4,7 @@ import React from 'react';
 import { Container, Typography, Stack, Box, Link, useTheme, SxProps, Theme } from '@mui/material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LanguageIcon from '@mui/icons-material/Language';
+import { useThemeContext } from '@/context/ThemeContextProvider';
 
 type SocialLink = {
   href: string;
@@ -37,11 +38,9 @@ const Footer: React.FC = () => {
   const theme = useTheme();
   const year = new Date().getFullYear();
 
-  const isDark = theme.palette.mode === 'dark';
-
   // Theme-aware colors
-  const backgroundColor = isDark ? theme.palette.background.paper : theme.palette.grey[900];
-  const textColor = isDark ? theme.palette.text.primary : theme.palette.grey[300];
+  const backgroundColor = theme.palette.background.footer;
+  const textColor = theme.palette.getContrastText(backgroundColor);
   const linkHoverColor = theme.palette.primary.light;
   const borderColor = theme.palette.divider;
   const linkHoverBg = theme.palette.action.hover;
@@ -68,7 +67,7 @@ const Footer: React.FC = () => {
       }}
     >
       <Typography variant="body2" align="center" sx={{ mb: 2, color: 'inherit' }}>
-        © {year} David McEwen. All rights reserved.
+        © {year} David McEwen International. All rights reserved.
       </Typography>
 
       <Container maxWidth="md" sx={{ mb: 2 }}>

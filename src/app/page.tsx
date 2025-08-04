@@ -4,8 +4,9 @@ import { useEffect } from 'react';
 import { Container, Typography, CircularProgress } from '@mui/material';
 import useBioStore from '@/stores/useBioStore';
 import ArtistBio from '@/components/Artist/ArtistBio';
+import { BioFields } from '@/lib/contentful';
 
-const Home = () => {
+const Home: React.FC = () => {
   const { bio, loading, error, loadBio } = useBioStore();
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const Home = () => {
 
   return (
     <Container maxWidth="md">
-      <ArtistBio bio={bio} />
+      <ArtistBio bio={bio as BioFields} />
     </Container>
   );
 };

@@ -2,8 +2,13 @@
 
 import { Grid, Typography } from '@mui/material';
 import PaintingCard from './PaintingCard';
+import { Painting } from '@/lib/contentful';
 
-const GalleryGrid = ({ paintings }) => {
+interface GalleryGridProps {
+  paintings: Painting[];
+}
+
+const GalleryGrid: React.FC<GalleryGridProps>  = ({ paintings }) => {
   if (!paintings || paintings.length === 0) {
     return (
       <Grid container spacing={4} justifyContent="center">

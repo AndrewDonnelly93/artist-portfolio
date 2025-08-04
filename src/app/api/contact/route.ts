@@ -1,11 +1,25 @@
 import { Resend } from 'resend';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY!);
 
-export async function POST(req) {
+type RequestBody = {
+  name: string;
+  email: string;
+  message: string;
+  token: string; // reCAPTCHA token
+};
+
+type RecaptchaResponse = {
+  success: boolean;
+  challenge_ts?: string; // timestamp of the challenge
+  hostname?: string; // the hostname of the site where the reCAPTCHA was solved
+  'error-codes'?: string[]; // array of error codes if verification failed
+};
+
+export async function POST(req: NextRequest) {
   try {
-    const { name, email, message, token } = await req.json();
+    const { name, email, message, token }: RequestBody = await req.json();
 
     if (!name || !email || !message || !token) {
       return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
@@ -18,12 +32,12 @@ export async function POST(req) {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        secret: process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY,
+        secret: process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY || '',
         response: token,
       }),
     });
 
-    const recaptchaJson = await recaptchaResponse.json();
+    const recaptchaJson: RecaptchaResponse = await recaptchaResponse.json();
 
     if (!recaptchaJson.success) {
       return NextResponse.json({ error: 'reCAPTCHA verification failed.' }, { status: 403 });
@@ -40,7 +54,7 @@ export async function POST(req) {
                    <p><strong>Message:</strong> ${message}</p>`,
     });
 
-    return NextResponse.json({ success: true, messageId: response.id });
+    return NextResponse.json({ success: true, messageId: (response as any).id });
   } catch (error) {
     console.error('Error sending email:', error);
     return NextResponse.json({ error: 'Failed to send message.' }, { status: 500 });

@@ -1,11 +1,22 @@
-import { fetchPaintingBySlug } from '@/lib/contentful';
-import { Box, Typography, Button, Chip, Stack } from '@mui/material';
+import { fetchPaintingBySlug, Painting } from '@/lib/contentful';
+import { Box, Typography } from '@mui/material';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Image from 'next/image';
+import BuyButtons from './BuyButtons';
 
-const PaintingPage = async ({ params }) => {
+interface PaintingPageProps {
+  params: { slug: string };
+}
+
+interface ImageUrl {
+  url: string;
+  width?: number | null;
+  height?: number | null;
+}
+
+const PaintingPage: React.FC<PaintingPageProps> = async ({ params }) => {
   const { slug } = await params;
-  const painting = await fetchPaintingBySlug(slug);
+  const painting: Painting | null = await fetchPaintingBySlug(slug);
 
   if (!painting || !painting.imageUrl) {
     return (
@@ -26,31 +37,11 @@ const PaintingPage = async ({ params }) => {
     price,
     printPrice,
     materials,
-    tags,
     id,
   } = painting;
 
   const width = imageUrl.width || 800;
   const height = imageUrl.height || 600;
-
-  const handleBuyNow = async () => {
-    const res = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title,
-        price,
-        id,
-      }),
-    });
-
-    const data = await res.json();
-    if (data.url) {
-      window.location.href = data.url;
-    }
-  };
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 4 }}>
@@ -79,7 +70,7 @@ const PaintingPage = async ({ params }) => {
         />
       </Box>
 
-      <Box sx={{ mb: 2, typography: 'body1' }}>{documentToReactComponents(description)}</Box>
+      <Box sx={{ mb: 2, typography: 'body1' }}>{documentToReactComponents(description as any)}</Box>
 
       <Typography variant="body2" sx={{ mb: 1 }}>
         <strong>Category:</strong> {category}
@@ -98,26 +89,7 @@ const PaintingPage = async ({ params }) => {
       </Typography>
 
       {availableForSale && (
-        <Box sx={{ mt: 2 }} onClick={handleBuyNow}>
-          {price && (
-            <Button variant="contained" color="primary" sx={{ mr: 2, mb: 2 }}>
-              Buy Original (€{price})
-            </Button>
-          )}
-          {printPrice && (
-            <Button sx={{ mb: 2 }} variant="outlined" color="secondary">
-              Buy Print (€{printPrice})
-            </Button>
-          )}
-        </Box>
-      )}
-
-      {tags && tags.length > 0 && (
-        <Box sx={{ mt: 2 }}>
-          <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', mt: 2 }}>
-            <Chip label={tags} size="small" variant="outlined" />
-          </Stack>
-        </Box>
+        <BuyButtons price={price} printPrice={printPrice} title={title} id={id} />
       )}
     </Box>
   );

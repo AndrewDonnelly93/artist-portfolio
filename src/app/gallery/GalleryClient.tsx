@@ -1,19 +1,23 @@
 'use client';
 
+import type { JSX, FC } from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { Box, Container, Typography, Pagination, Stack, Fade } from '@mui/material';
+import { Box, Container, Typography, Stack, Fade } from '@mui/material';
+import ThemedPagination from '@/components/ThemedPagination/ThemedPagination';
 import { useSearchParams, useRouter } from 'next/navigation';
 import GalleryFilter from '@/components/Gallery/GalleryFilter';
 import GalleryGrid from '@/components/Gallery/GalleryGrid';
 import SearchBar from '@/components/SearchBar/SearchBar';
-import usePaintingStore from '@/stores/usePaintingStore';
+import { Category, isCategory } from '@/types/category';
+import usePaintingStore, { PaintingStore } from '@/stores/usePaintingStore';
 import useGalleryStore from '@/stores/useGalleryStore';
 import { filterPaintings } from '@/lib/selectors';
+import { Painting } from '@/lib/contentful';
 
 const ITEMS_PER_PAGE = 9;
 
-export default function GalleryClient() {
-  const { paintings, loading, error, loadPaintings } = usePaintingStore();
+const GalleryClient: FC = (): JSX.Element => {
+  const { paintings, loading, error, loadPaintings } = usePaintingStore() as PaintingStore;
   const hasSyncedFromURL = useRef(false);
 
   const {
@@ -25,7 +29,7 @@ export default function GalleryClient() {
     setAvailableForSale,
   } = useGalleryStore();
 
-  const [filtered, setFiltered] = useState([]);
+  const [filtered, setFiltered] = useState<Painting[]>([]);
   const [page, setPage] = useState(1);
 
   const searchParams = useSearchParams();
@@ -42,10 +46,11 @@ export default function GalleryClient() {
   useEffect(() => {
     if (hasSyncedFromURL.current) return;
 
-    const queryCategory = searchParams.get('category') || 'All';
+    const categoryParam = searchParams.get('category');
+    const queryCategory: Category = isCategory(categoryParam) ? categoryParam : 'All';
     const queryForSale = searchParams.get('sale') === 'true';
     const querySearch = searchParams.get('search') || '';
-    const queryPage = parseInt(searchParams.get('page')) || 1;
+    const queryPage = parseInt(searchParams.get('page')!) || 1;
 
     setCategoryFilter(queryCategory);
     setAvailableForSale(queryForSale);
@@ -97,7 +102,7 @@ export default function GalleryClient() {
           alignItems={{ xs: 'stretch', sm: 'center' }}
           sx={{ mb: 4, width: '100%' }}
         >
-          <SearchBar value={searchQuery} />
+          <SearchBar />
           <GalleryFilter
             categoryFilter={categoryFilter}
             availableForSale={availableForSale}
@@ -123,24 +128,10 @@ export default function GalleryClient() {
             </Fade>
 
             <Stack spacing={2} alignItems="center">
-              <Pagination
+              <ThemedPagination
                 count={Math.ceil(filtered.length / ITEMS_PER_PAGE)}
                 page={page}
                 onChange={(_, value) => setPage(value)}
-                color="primary"
-                sx={{
-                  button: {
-                    color: '#fff',
-                    borderColor: '#888',
-                  },
-                  '.Mui-selected': {
-                    backgroundColor: '#90caf9',
-                    color: '#000',
-                    '&:hover': {
-                      backgroundColor: '#64b5f6',
-                    },
-                  },
-                }}
               />
             </Stack>
           </>
@@ -148,4 +139,6 @@ export default function GalleryClient() {
       </Container>
     </Box>
   );
-}
+};
+
+export default GalleryClient;

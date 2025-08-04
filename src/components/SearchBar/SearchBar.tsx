@@ -1,12 +1,12 @@
 'use client';
 
 import { TextField } from '@mui/material';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import useGalleryStore from '@/stores/useGalleryStore';
 
-const SearchBar = () => {
+const SearchBar: React.FC = () => {
   const { searchQuery, setSearchQuery } = useGalleryStore();
-  const [localQuery, setLocalQuery] = useState(searchQuery);
+  const [localQuery, setLocalQuery] = useState<string>(searchQuery);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -24,6 +24,7 @@ const SearchBar = () => {
       onChange={(e) => setLocalQuery(e.target.value)}
       fullWidth
       sx={{ flexGrow: 1 }}
+      slotProps={{ input: { 'aria-label': 'Search paintings' } }}
     />
   );
 };

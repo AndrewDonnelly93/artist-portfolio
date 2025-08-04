@@ -1,0 +1,8 @@
+// mui.d.ts
+import '@mui/material/styles';
+
+declare module '@mui/material/styles' {
+  interface TypeBackground {
+    footer: string;
+  }
+}

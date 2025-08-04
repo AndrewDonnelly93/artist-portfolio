@@ -1,7 +1,14 @@
 import { create } from 'zustand';
-import { fetchBio } from '@/lib/contentful';
+import { fetchBio, BioFields } from '@/lib/contentful';
 
-const useBioStore = create((set) => ({
+interface BioStore {
+  bio: BioFields | null;
+  loading: boolean;
+  error: string | null;
+  loadBio: () => Promise<void>;
+}
+
+const useBioStore = create<BioStore>((set) => ({
   bio: null,
   loading: false,
   error: null,

@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import dynamic from 'next/dynamic';
@@ -11,17 +11,31 @@ import {
   TextField,
   Button,
   Alert,
-  Grid,
   Paper,
   CircularProgress,
   FormControl,
   FormHelperText,
   Box,
+  Grid,
 } from '@mui/material';
-import type { MutableRefObject } from 'react';
 import type ReCAPTCHAType from 'react-google-recaptcha';
 
-const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), { ssr: false });
+const RawReCAPTCHA = dynamic(() => import('react-google-recaptcha'), { ssr: false });
+
+type ReCAPTCHAHandles = {
+  reset: () => void;
+  execute: () => void;
+};
+
+const ReCAPTCHA = forwardRef<ReCAPTCHAType, React.ComponentProps<typeof RawReCAPTCHA>>(
+  (props, ref) => {
+    const innerRef = useRef<ReCAPTCHAType>(null);
+
+    useImperativeHandle(ref, () => innerRef.current as ReCAPTCHAType);
+    // @ts-expect-error React-google-recaptcha types do not declare ref, ignore error here
+    return <RawReCAPTCHA {...props} ref={innerRef as any} />;
+  }
+);
 
 // -------------------
 // 🔒 Schema + Types
@@ -29,7 +43,7 @@ const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), { ssr: false }
 
 const schema = z.object({
   name: z.string().min(2, 'Name is too short'),
-  email: z.string().email('Invalid email address'),
+  email: z.email('Invalid email address'),
   message: z.string().min(10, 'Message must be at least 10 characters long'),
   token: z.string().min(1, 'reCAPTCHA token is required'),
 });
@@ -48,7 +62,7 @@ const ContactPage = () => {
     setMounted(true);
   }, []);
 
-  const recaptchaRef = useRef<ReCAPTCHAType | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHAHandles>(null);
 
   const {
     register,
@@ -89,7 +103,7 @@ const ContactPage = () => {
         reset();
 
         if (recaptchaRef.current) {
-          recaptchaRef.current.reset();
+          recaptchaRef.current?.reset();
         }
 
         setValue('token', '');
@@ -173,20 +187,22 @@ const ContactPage = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Grid container spacing={3} direction="column">
-              <Grid item>
+              <Grid size={{ xs: 12 }}>
                 <FormControl fullWidth error={!!errors.name}>
                   <TextField
                     fullWidth
                     label="Name"
                     {...register('name')}
                     error={!!errors.name}
-                    InputLabelProps={{ style: { color: 'inherit' } }}
+                    slotProps={{
+                      inputLabel: { style: { color: 'inherit' } },
+                    }}
                   />
                   {errors.name && <FormHelperText>{errors.name.message}</FormHelperText>}
                 </FormControl>
               </Grid>
 
-              <Grid item>
+              <Grid size={{ xs: 12 }}>
                 <FormControl fullWidth error={!!errors.email}>
                   <TextField
                     fullWidth
@@ -194,13 +210,15 @@ const ContactPage = () => {
                     type="email"
                     {...register('email')}
                     error={!!errors.email}
-                    InputLabelProps={{ style: { color: 'inherit' } }}
+                    slotProps={{
+                      inputLabel: { style: { color: 'inherit' } },
+                    }}
                   />
                   {errors.email && <FormHelperText>{errors.email.message}</FormHelperText>}
                 </FormControl>
               </Grid>
 
-              <Grid item>
+              <Grid size={{ xs: 12 }}>
                 <FormControl fullWidth error={!!errors.message}>
                   <TextField
                     fullWidth
@@ -209,14 +227,16 @@ const ContactPage = () => {
                     rows={4}
                     {...register('message')}
                     error={!!errors.message}
-                    InputLabelProps={{ style: { color: 'inherit' } }}
+                    slotProps={{
+                      inputLabel: { style: { color: 'inherit' } },
+                    }}
                   />
                   {errors.message && <FormHelperText>{errors.message.message}</FormHelperText>}
                 </FormControl>
               </Grid>
 
               <Grid
-                item
+                size={{ xs: 12 }}
                 sx={(theme) => ({
                   display: 'flex',
                   justifyContent: 'center',
@@ -234,6 +254,7 @@ const ContactPage = () => {
                   <ReCAPTCHA
                     sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
                     onChange={(value) => setValue('token', value || '', { shouldValidate: true })}
+                    // @ts-expect-error React-google-recaptcha types do not declare ref, ignore error here
                     ref={recaptchaRef}
                   />
                 ) : (
@@ -244,7 +265,7 @@ const ContactPage = () => {
                 )}
               </Grid>
 
-              <Grid item sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Grid size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Button
                   type="submit"
                   variant="contained"

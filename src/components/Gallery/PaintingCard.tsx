@@ -1,21 +1,20 @@
 'use client';
 import Link from 'next/link';
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  CardActions,
-  Chip,
-  Box,
-  Stack,
-  Button,
-  useTheme,
-} from '@mui/material';
+import { Card, CardContent, Typography, CardActions, Box, Button, useTheme } from '@mui/material';
 import Image from 'next/image';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { Painting } from '@/lib/contentful';
 
-const PaintingCard = ({ painting }) => {
+export interface ImageUrl {
+  url: string;
+  width?: number | null;
+  height?: number | null;
+}
+
+interface PaintingCardProps {
+  painting: Painting;
+}
+const PaintingCard: React.FC<PaintingCardProps> = ({ painting }) => {
   const theme = useTheme();
 
   const {
@@ -28,7 +27,6 @@ const PaintingCard = ({ painting }) => {
     price,
     printPrice,
     materials,
-    tags,
     slug,
     description,
     printAvailable,
@@ -98,7 +96,7 @@ const PaintingCard = ({ painting }) => {
             {title}
           </Typography>
           <Typography component="div" variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            {documentToReactComponents(description)}
+            {documentToReactComponents(description as any)}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {category} • {yearCreated} • {dimensions}

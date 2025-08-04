@@ -31,15 +31,14 @@ const navLinks = [
 const NavBar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
+  const { mode, toggleColorMode } = useThemeContext();
+  const isDark = mode === 'dark';
 
   const pathname = usePathname();
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
-
-  const { mode, toggleColorMode } = useThemeContext();
 
   return (
     <AppBar
