@@ -8,13 +8,7 @@ interface PaintingPageProps {
   params: { slug: string };
 }
 
-interface ImageUrl {
-  url: string;
-  width?: number | null;
-  height?: number | null;
-}
-
-const PaintingPage: React.FC<PaintingPageProps> = async ({ params }) => {
+const PaintingPage = async ({ params }: PaintingPageProps) => {
   const { slug } = await params;
   const painting: Painting | null = await fetchPaintingBySlug(slug);
 
