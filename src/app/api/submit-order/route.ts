@@ -49,12 +49,18 @@ Phone: ${deliveryInfo.phone || '(Not provided)'}
 Comment: ${comment || '(None)'}
 `;
 
-    await resend.emails.send({
-      from: 'orders@davidmceweninternational.ie', // Use a verified sender
-      to: ['david@davidmceweninternational.ie', 'andrew.donnelly.1403@gmail.com', email],
-      subject: `🎨 New Order – ${paintingId}`,
-      text: message,
-    });
+    try {
+      const emailResponse = await resend.emails.send({
+        from: 'orders@davidmceweninternational.ie', // Use a verified sender
+        to: ['david@davidmceweninternational.ie', 'andrew.donnelly.1403@gmail.com', email],
+        subject: `🎨 New Order – ${paintingId}`,
+        text: message,
+      });
+
+      console.log('✅ Email sent successfully:', emailResponse);
+    } catch (emailError) {
+      console.error('❌ Failed to send email:', emailError);
+    }
 
     // 2. Optional: Update Contentful entry
     if (process.env.UPDATE_CONTENTFUL === 'true' && paintingId && purchaseType) {
@@ -79,8 +85,14 @@ Comment: ${comment || '(None)'}
           ...updatedFields,
         };
 
+        // Apply updates
         await entry.update();
-        await entry.publish();
+
+        // Refetch the entry to get the updated version number
+        const updatedEntry = await managementEnv.getEntry(paintingId);
+
+        // Now publish the fresh version
+        await updatedEntry.publish();
       } catch (error) {
         console.error('⚠️ Error updating Contentful:', error);
       }

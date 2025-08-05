@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, CardActions, Box, Button, useTheme } fro
 import Image from 'next/image';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { Painting } from '@/lib/contentful';
+import { only } from 'node:test';
 
 export interface ImageUrl {
   url: string;
@@ -35,15 +36,20 @@ const PaintingCard: React.FC<PaintingCardProps> = ({ painting }) => {
 
   const isDark = theme.palette.mode === 'dark';
 
+  const onlyOneButton =
+    (availableForSale && !printAvailable) || (!availableForSale && printAvailable);
+
   const buttonStyles = {
     fontWeight: 'bold',
+    width: onlyOneButton ? '50%' : 'auto',
+    minWidth: 120,
     borderColor: isDark ? 'secondary.light' : 'secondary.main',
     color: isDark ? 'secondary.light' : 'secondary.main',
     '&:hover': {
       backgroundColor: isDark ? 'secondary.dark' : 'secondary.light',
       color: isDark ? 'common.white' : 'common.black',
     },
-    flex: 1, // make buttons share equal width
+    flex: availableForSale && printAvailable ? 1 : undefined,
   };
 
   return (
@@ -72,6 +78,12 @@ const PaintingCard: React.FC<PaintingCardProps> = ({ painting }) => {
             borderRadius: 2,
             overflow: 'hidden',
             cursor: 'pointer',
+            '& img': {
+              transition: 'transform 0.3s ease',
+            },
+            '&:hover img': {
+              transform: 'scale(1.1)',
+            },
           }}
         >
           <Image
