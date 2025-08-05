@@ -37,7 +37,7 @@ const BuyButtons: React.FC<BuyButtonProps> = ({ price, printPrice, title, id }) 
   return (
     <Box sx={{ mt: 2 }} onClick={handleBuyNow}>
       {price && (
-        <Button variant="contained" color="primary" sx={{ mr: 2, mb: 2 }}>
+        <Button variant="outlined" color="primary" sx={{ mr: 2, mb: 2 }}>
           Buy Original (€{price})
         </Button>
       )}

@@ -1,4 +1,3 @@
-'use client';
 import Link from 'next/link';
 import { Card, CardContent, Typography, CardActions, Box, Button, useTheme } from '@mui/material';
 import Image from 'next/image';
@@ -121,7 +120,7 @@ const PaintingCard: React.FC<PaintingCardProps> = ({ painting }) => {
         {(availableForSale || printAvailable) && (
           <CardActions sx={{ px: 2, pb: 2, gap: 1 }}>
             {availableForSale && price && (
-              <Button variant="outlined" color="secondary" sx={buttonStyles}>
+              <Button variant="outlined" color="primary" sx={buttonStyles}>
                 Buy Original
               </Button>
             )}

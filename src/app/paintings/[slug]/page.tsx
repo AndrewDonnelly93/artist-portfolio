@@ -4,11 +4,9 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import Image from 'next/image';
 import BuyButtons from './BuyButtons';
 
-interface PaintingPageProps {
-  params: { slug: string };
-}
+type Params = Promise<{ slug: string }>;
 
-const PaintingPage = async ({ params }: PaintingPageProps) => {
+export default async function PaintingPage({ params }: { params: Params }) {
   const { slug } = await params;
   const painting: Painting | null = await fetchPaintingBySlug(slug);
 
@@ -87,6 +85,4 @@ const PaintingPage = async ({ params }: PaintingPageProps) => {
       )}
     </Box>
   );
-};
-
-export default PaintingPage;
+}
