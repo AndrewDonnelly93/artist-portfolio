@@ -242,9 +242,7 @@ const ALL_COUNTRIES = [
   'ZZ',
 ];
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-06-30.basil',
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 type RequestBody = {
   title: string;
