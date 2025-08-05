@@ -248,12 +248,13 @@ type RequestBody = {
   title: string;
   id: string;
   price: number;
+  purchaseType: 'original' | 'print';
 };
 
 export async function POST(req: NextRequest) {
   try {
     const body: RequestBody = await req.json();
-    const { title, id, price } = body;
+    const { title, id, price, purchaseType } = body;
 
     if (!process.env.STRIPE_SECRET_KEY) {
       console.error('❌ STRIPE_SECRET_KEY not found');
@@ -265,6 +266,9 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       shipping_address_collection: {
         allowed_countries: ALL_COUNTRIES,
+      },
+      phone_number_collection: {
+        enabled: true,
       },
       line_items: [
         {
@@ -283,6 +287,8 @@ export async function POST(req: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/gallery`,
       metadata: {
         paintingId: id,
+        purchaseType,
+        paintingTitle: title,
       },
     });
 

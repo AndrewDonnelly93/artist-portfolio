@@ -1,9 +1,7 @@
 import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-06-30.basil',
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -15,7 +13,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['line_items', 'customer_details'],
+      expand: ['shipping.address', 'line_items.data.price.product', 'customer_details'],
     });
 
     return NextResponse.json(session);

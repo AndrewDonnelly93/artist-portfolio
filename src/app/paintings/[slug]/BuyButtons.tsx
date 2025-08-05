@@ -10,7 +10,7 @@ type BuyButtonProps = {
 };
 
 const BuyButtons: React.FC<BuyButtonProps> = ({ price, printPrice, title, id }) => {
-  const handleBuyNow = async () => {
+  const handleBuyNow = async (purchaseType: 'original' | 'print') => {
     const res = await fetch('/api/checkout', {
       method: 'POST',
       headers: {
@@ -18,8 +18,9 @@ const BuyButtons: React.FC<BuyButtonProps> = ({ price, printPrice, title, id }) 
       },
       body: JSON.stringify({
         title,
-        price,
+        price: purchaseType === 'original' ? price : printPrice,
         id,
+        purchaseType,
       }),
     });
 
@@ -29,20 +30,25 @@ const BuyButtons: React.FC<BuyButtonProps> = ({ price, printPrice, title, id }) 
     }
   };
 
-  const handlePrintPurchase = () => {
-    // Implement print purchase functionality
-    console.log(`Purchasing print of ${title} with ID: ${id}`);
-  };
-
   return (
-    <Box sx={{ mt: 2 }} onClick={handleBuyNow}>
+    <Box sx={{ mt: 2 }}>
       {price && (
-        <Button variant="outlined" color="primary" sx={{ mr: 2, mb: 2 }}>
+        <Button
+          variant="outlined"
+          color="primary"
+          sx={{ mr: 2, mb: 2 }}
+          onClick={() => handleBuyNow('original')}
+        >
           Buy Original (€{price})
         </Button>
       )}
       {printPrice && (
-        <Button sx={{ mb: 2 }} variant="outlined" color="secondary">
+        <Button
+          sx={{ mb: 2 }}
+          variant="outlined"
+          color="secondary"
+          onClick={() => handleBuyNow('print')}
+        >
           Buy Print (€{printPrice})
         </Button>
       )}
