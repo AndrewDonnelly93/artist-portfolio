@@ -254,9 +254,18 @@ export async function POST(req: NextRequest) {
   try {
     const body: RequestBody = await req.json();
     const { title, id, price } = body;
-    // @ts-expect-error TypeScript may not recognize the body structure
+
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error('❌ STRIPE_SECRET_KEY not found');
+      return NextResponse.json({ error: 'Missing Stripe secret key' }, { status: 500 });
+    }
+
+    // @ts-expect-error
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      shipping_address_collection: {
+        allowed_countries: ALL_COUNTRIES,
+      },
       line_items: [
         {
           price_data: {
@@ -264,15 +273,12 @@ export async function POST(req: NextRequest) {
             product_data: {
               name: title,
             },
-            unit_amount: price * 100, // in cents
+            unit_amount: Math.round(price * 100),
           },
           quantity: 1,
         },
       ],
       mode: 'payment',
-      shipping_address_collection: {
-        allowed_countries: ALL_COUNTRIES,
-      },
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/gallery`,
       metadata: {
@@ -282,13 +288,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (error: any) {
-    console.error('Stripe checkout session error:', error);
-
-    return NextResponse.json(
-      {
-        error: error.message || JSON.stringify(error) || 'Unknown error',
-      },
-      { status: 500 }
-    );
+    console.error('❌ Stripe Checkout error:', error);
+    return NextResponse.json({ error: error.message || 'Something went wrong' }, { status: 500 });
   }
 }
