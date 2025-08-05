@@ -7,9 +7,18 @@ type BuyButtonProps = {
   printPrice?: number;
   title: string;
   id: string;
+  printAvailable?: boolean;
+  availableForSale?: boolean;
 };
 
-const BuyButtons: React.FC<BuyButtonProps> = ({ price, printPrice, title, id }) => {
+const BuyButtons: React.FC<BuyButtonProps> = ({
+  price,
+  printPrice,
+  title,
+  id,
+  printAvailable,
+  availableForSale,
+}) => {
   const handleBuyNow = async (purchaseType: 'original' | 'print') => {
     const res = await fetch('/api/checkout', {
       method: 'POST',
@@ -32,7 +41,7 @@ const BuyButtons: React.FC<BuyButtonProps> = ({ price, printPrice, title, id }) 
 
   return (
     <Box sx={{ mt: 2 }}>
-      {price && (
+      {price && availableForSale && (
         <Button
           variant="outlined"
           color="primary"
@@ -42,7 +51,7 @@ const BuyButtons: React.FC<BuyButtonProps> = ({ price, printPrice, title, id }) 
           Buy Original (€{price})
         </Button>
       )}
-      {printPrice && (
+      {printPrice && printAvailable && (
         <Button
           sx={{ mb: 2 }}
           variant="outlined"

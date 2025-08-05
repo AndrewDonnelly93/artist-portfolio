@@ -3,7 +3,6 @@ import { Card, CardContent, Typography, CardActions, Box, Button, useTheme } fro
 import Image from 'next/image';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { Painting } from '@/lib/contentful';
-import { only } from 'node:test';
 
 export interface ImageUrl {
   url: string;

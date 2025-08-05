@@ -30,6 +30,7 @@ export default async function PaintingPage({ params }: { params: Params }) {
     printPrice,
     materials,
     id,
+    printAvailable,
   } = painting;
 
   const width = imageUrl.width || 800;
@@ -80,8 +81,15 @@ export default async function PaintingPage({ params }: { params: Params }) {
         <strong>Materias:</strong> {materials}
       </Typography>
 
-      {availableForSale && (
-        <BuyButtons price={price} printPrice={printPrice} title={title} id={id} />
+      {(availableForSale || printAvailable) && (
+        <BuyButtons
+          price={price}
+          printPrice={printPrice}
+          title={title}
+          printAvailable={printAvailable}
+          availableForSale={availableForSale}
+          id={id}
+        />
       )}
     </Box>
   );
