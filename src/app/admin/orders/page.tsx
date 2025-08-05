@@ -36,7 +36,20 @@ const OrdersPage = () => {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return <CircularProgress />;
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          height: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ maxWidth: 1000, mx: 'auto', p: 4 }}>

@@ -57,31 +57,34 @@ Comment: ${comment || '(None)'}
     });
 
     // 2. Optional: Update Contentful entry
-    // if (process.env.UPDATE_CONTENTFUL === 'true') {
-    //   const managementEnv = await contentfulClient
-    //     .getSpace(SPACE_ID)
-    //     .then((space) => space.getEnvironment(ENVIRONMENT_ID));
+    if (process.env.UPDATE_CONTENTFUL === 'true' && paintingId && purchaseType) {
+      try {
+        const managementEnv = await contentfulClient
+          .getSpace(SPACE_ID)
+          .then((space) => space.getEnvironment(ENVIRONMENT_ID));
 
-    //   const entry = await managementEnv.getEntry(paintingId);
+        const entry = await managementEnv.getEntry(paintingId);
+        const current = entry.fields;
 
-    //   const current = entry.fields;
+        const updatedFields: any = {};
 
-    //   const updatedFields: any = {};
+        if (purchaseType === 'original') {
+          updatedFields.availableForSale = { 'en-US': false };
+        } else if (purchaseType === 'print') {
+          updatedFields.printAvailable = { 'en-US': false };
+        }
 
-    //   if (purchaseType === 'original') {
-    //     updatedFields.availableForSale = { 'en-US': false };
-    //   } else if (purchaseType === 'print') {
-    //     updatedFields.printAvailable = { 'en-US': false };
-    //   }
+        entry.fields = {
+          ...current,
+          ...updatedFields,
+        };
 
-    //   entry.fields = {
-    //     ...current,
-    //     ...updatedFields,
-    //   };
-
-    //   await entry.update();
-    //   await entry.publish();
-    // }
+        await entry.update();
+        await entry.publish();
+      } catch (error) {
+        console.error('⚠️ Error updating Contentful:', error);
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (err: any) {
