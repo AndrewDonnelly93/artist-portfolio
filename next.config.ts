@@ -18,7 +18,15 @@ const nextConfig = {
               "font-src 'self' https://fonts.gstatic.com;",
               'frame-src https://www.google.com https://www.recaptcha.net;',
               "img-src 'self' https://ctfassets.net https://*.ctfassets.net;",
-              "connect-src 'self' https://*.ctfassets.net https://cdn.contentful.com https://www.google.com https://www.gstatic.com;",
+              [
+                "connect-src 'self'",
+                'https://identitytoolkit.googleapis.com',
+                'https://*.ctfassets.net',
+                'https://cdn.contentful.com',
+                'https://www.google.com',
+                'https://www.gstatic.com',
+                'https://firestore.googleapis.com', // 👈 Added Firestore here
+              ].join(' '),
               "object-src 'none';",
               "base-uri 'self';",
               "form-action 'self';",
