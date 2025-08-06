@@ -13,6 +13,7 @@ export interface ImageUrl {
 interface PaintingCardProps {
   painting: Painting;
 }
+
 const PaintingCard: React.FC<PaintingCardProps> = ({ painting }) => {
   const theme = useTheme();
 
@@ -48,7 +49,7 @@ const PaintingCard: React.FC<PaintingCardProps> = ({ painting }) => {
       backgroundColor: isDark ? 'secondary.dark' : 'secondary.light',
       color: isDark ? 'common.white' : 'common.black',
     },
-    flex: availableForSale && printAvailable ? 1 : undefined,
+    flex: availableForSale && printAvailable ? 1 : 'unset',
   };
 
   return (
@@ -79,6 +80,7 @@ const PaintingCard: React.FC<PaintingCardProps> = ({ painting }) => {
             cursor: 'pointer',
             '& img': {
               transition: 'transform 0.3s ease',
+              willChange: 'transform',
             },
             '&:hover img': {
               transform: 'scale(1.1)',
