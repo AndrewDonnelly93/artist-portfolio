@@ -112,7 +112,7 @@ const Footer: React.FC = () => {
         <Typography variant="body2" align="center" sx={{ color: 'inherit' }}>
           Built by&nbsp;
           <Link
-            href="https://www.linkedin.com/in/andrewdonnelly93/"
+            href="https://www.donnellytechsolutions.co.uk/"
             target="_blank"
             rel="noopener noreferrer"
             color="inherit"
@@ -124,7 +124,7 @@ const Footer: React.FC = () => {
               '&:hover, &:focus-visible': linkHoverStyles,
             }}
           >
-            Andrew Donnelly
+            Donnelly Tech Solutions
           </Link>
         </Typography>
       </Container>
