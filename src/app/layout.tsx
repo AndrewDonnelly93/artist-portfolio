@@ -23,6 +23,12 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="PJCiFwS3setyCfAvUlR-v718I-HgrJzbkxoANGPTkvg"
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeContextProvider>
           <NavBar />
